@@ -119,7 +119,9 @@ class Person implements IAT{
 // examples and tests for the class hierarchy that represents
 // ancestor trees
 class ExamplesAncestors{
-    ExamplesAncestors() {}
+    ExamplesAncestors() {
+      
+    }
    
     IAT unknown = new Unknown();
     IAT mary = new Person("Mary", this.unknown, this.unknown);
