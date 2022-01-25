@@ -60,7 +60,10 @@ ILoBook listc = new ConsLoBook(this.lpp,
 ILoBook listd = new ConsLoBook(this.ll,
                   new ConsLoBook(this.lpp,
                     new ConsLoBook(this.htdp, this.mtlist)));
-
+ILoBook listdUnsorted =
+  new ConsLoBook(this.lpp,
+    new ConsLoBook(this.htdp,
+      new ConsLoBook(this.ll, this.mtlist)));
 
 
 */
@@ -88,6 +91,11 @@ interface ILoBook {
     
     // produce a list of all books in this list, sorted by their price
     ILoBook sortByPrice();
+
+    // in ILoBook
+    // insert the given book into this list of books
+    // already sorted by price
+    ILoBook insert(Book b);
 }
 
 // Now, we have to define these methods in the class MtLoBook and ConsLoBook
@@ -109,6 +117,12 @@ class MtLoBook implements ILoBook {
         return 0; }
 
     //have to also put in sortByPrice, it is required because we implmented ILoBook
+
+    // insert the given book into this empty list of books
+    // already sorted by price
+    public ILoBook insert(Book b) {
+        return new ConsLoBook(b, this);
+    }
 
 }
 
@@ -163,6 +177,26 @@ class ConsLoBook implements ILoBook {
         }
     }
 
+    // In ConsLoBook
+    // produces a list of the books in this non-empty list, sorted by price
+    public ILoBook sortByPrice() {
+        return this.rest.sortByPrice()  // sort the rest of the list...
+                .insert(this.first); // and insert the first book into that result
+    }
+
+
+
+    // insert the given book into this list of books
+    // already sorted by price
+    public ILoBook insert(Book b) {
+        if (this.first.cheaperThan(b)) {
+        return new ConsLoBook(this.first, this.rest.insert(b));
+        }
+        else {
+        return new ConsLoBook(b, this);
+        }
+    }
+
 }
 
 //for this.rest.allBefore(int year) , all that needs to be done is figure out whether the first
@@ -192,6 +226,13 @@ class Book {
     // was this book published before the given year?
     boolean publishedBefore(int year) {
         return this.year < year;
+
+    // in Book
+    // is the price of this book cheaper than the price of the given book?
+    boolean cheaperThan(Book that) {
+        return this.price < that.price;
+    }
+
   }
 
   // there also has to be the double salePrice here by the template at the very top
@@ -253,7 +294,15 @@ boolean testCount(Tester t) {
 
 // We do not need to create a new empty list, this one works perfectly well.
 
+// We need examples for more complex cases up above.
+// Our tests will be:
 
+// test the method sort for the lists of books
+    boolean testSort(Tester t) {
+        return
+        t.checkExpect(this.listc.sortByPrice(), this.listd) &&
+        t.checkExpect(this.listdUnsorted.sortByPrice(), this.listd);
+    }
 
 
     
