@@ -1,3 +1,6 @@
 # accel-notes
 
-Notes for cs2510 class with Ben Lerner
+Notes for Fundamentals of Computer Science 2
+class with Ben Lerner
+
+
